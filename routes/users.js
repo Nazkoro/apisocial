@@ -2,6 +2,7 @@ const User = require("../models/User");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 
+
 //update user
 router.put("/:id", async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
@@ -54,6 +55,17 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.find()
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
 
 //get friends
 router.get("/friends/:userId", async (req, res) => {

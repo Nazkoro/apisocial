@@ -12,7 +12,10 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 const path = require("path");
 const cors = require("cors");
+const cookieParser = require('cookie-parser')
 
+const authMiddleware = require('./middlewaree/authMiddleware')
+const roleMiddleware = require('./middlewaree/roleMiddleware')
 dotenv.config();
 
 console.log(process.env.MONGO_URL);
@@ -54,8 +57,8 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 });
 
 app.use("/api/auth", authRoute);
-app.use("/api/users", userRoute);
-app.use("/api/posts", postRoute);
+app.use("/api/users",authMiddleware, userRoute);
+app.use("/api/posts",authMiddleware, postRoute);
 
 app.listen(8800, () => {
   console.log("Backend server is running!");
