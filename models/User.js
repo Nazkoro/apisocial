@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
-      require: true,
-      min: 3,
-      max: 20,
-      unique: true,
-    },
+    // username: {
+    //   type: String,
+    //   require: true,
+    //   min: 3,
+    //   max: 20,
+    //   unique: true,
+    // },
     email: {
       type: String,
       required: true,
@@ -19,6 +19,13 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       min: 6,
+    },
+    isActivated: {
+      type: Boolean,
+       default: false,
+      },
+    activationLink: {
+      type: String,
     },
     profilePicture: {
       type: String,
