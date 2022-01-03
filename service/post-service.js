@@ -14,7 +14,7 @@ class PostService {
 //create a post
 
  async addPost (bodyOfPost)  {
-      const newPost = new Post(bodyOfPost);
+      const newPost = new PostModel(bodyOfPost);
       const savePost = await newPost.save();
       return savePost;
     //   res.status(200).json(savedPost);

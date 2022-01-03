@@ -17,11 +17,13 @@ class PostController {
 //create a post
 
  async createPost (req, res) {
+   console.log(req.body)
     try {
       const savedPost = await postService.addPost(req.body);
        return res.status(200).json(savedPost);
-    }  catch (e) {
-        next(e);
+    }  catch (err) {
+        res.status(500).json(err);
+        // next(e);
     }
   };
   //update a post
