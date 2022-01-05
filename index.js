@@ -6,12 +6,15 @@ const mongoose = require('mongoose');
  const multer = require("multer");
 const router = require('./router/index')
 const errorMiddleware = require('./middlewares/error-middleware');
+ const path = require("path");
 
 const PORT = process.env.PORT || 5000;
 const app = express()
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static('public'));
+// app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use(cors({
     credentials: true,
     origin: process.env.CLIENT_URL
@@ -21,15 +24,20 @@ app.use(cors({
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/images");
+    console.log('fir========================',file)
+    cb(null, "public/images");  
+    
   },
   filename: (req, file, cb) => {
-    cb(null, req.body.name);
+    cb(null, file.originalname);
   },
 });
 
 const upload = multer({ storage: storage });
+
 app.post("/api/upload", upload.single("file"), (req, res) => {
+  
+  console.log(req)
   try {
     return res.status(200).json("File uploded successfully");
   } catch (error) {
