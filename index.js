@@ -7,14 +7,19 @@ const mongoose = require('mongoose');
 const router = require('./router/index')
 const errorMiddleware = require('./middlewares/error-middleware');
  const path = require("path");
+ const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 5000;
 const app = express()
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+// app.use(express.bodyParser());
 app.use(cookieParser());
-app.use(express.static('public'));
-// app.use("/images", express.static(path.join(__dirname, "public/images")));
+// app.use(express.static('public'));
+app.use("/images", express.static(path.join(__dirname, "public/images")));
+//  app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use(cors({
     credentials: true,
     origin: process.env.CLIENT_URL
@@ -23,27 +28,51 @@ app.use(cors({
 
 
 const storage = multer.diskStorage({
+  
   destination: (req, file, cb) => {
     console.log('fir========================',file)
+    // file.path.replace("\\","/")
+    //console.log('============================gorit sraka==========================', file)
     cb(null, "public/images");  
     
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    cb(null, JSON.stringify(Date.now()) );
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage
+//   , fileFilter: (req, file, cb) => {
+//   if (!file.mimetype) {
+//     return;
+//   }
+// }
+ });
 
-app.post("/api/upload", upload.single("file"), (req, res) => {
+// app.post("/api/upload", upload.array(['file']), (req, res) => {
+  app.post("/api/upload", upload.single('file'), (req, res) => {
   
-  console.log(req)
+  // console.log("==============999999999999999999999999999999===============")
+  //  console.log('==================in post=============',req.file)
+   console.log('=================description==============', req.body)
+   
   try {
+    
     return res.status(200).json("File uploded successfully");
   } catch (error) {
     console.error(error);
   }
 });
+
+// app.get()
+// router.get("/:id", async (req, res) => {
+//   try {
+//     const post = await Post.findById(req.params.id);
+//     res.status(200).json(post);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 
 
