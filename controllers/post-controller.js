@@ -16,16 +16,16 @@ class PostController {
     }; 
 //create a post
 
- async createPost (req, res) {
-   console.log(req.body)
-    try {
-      const savedPost = await postService.addPost(req.body);
-       return res.status(200).json(savedPost);
-    }  catch (err) {
-        res.status(500).json(err);
-        // next(e);
-    }
-  };
+//  async createPost (req, res) {
+//    console.log(req.body)
+//     try {
+//       const savedPost = await postService.addPost(req.body);
+//        return res.status(200).json(savedPost);
+//     }  catch (err) {
+//         res.status(500).json(err);
+//         // next(e);
+//     }
+//   };
   //update a post
   
   async updatePost (req, res) {

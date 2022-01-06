@@ -9,8 +9,10 @@ const errorMiddleware = require('./middlewares/error-middleware');
  const path = require("path");
  const bodyParser = require('body-parser');
 
+
 const PORT = process.env.PORT || 5000;
 const app = express()
+const PostModel = require('./models/Post');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,7 +34,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     console.log('fir========================',file)
     // file.path.replace("\\","/")
-    //console.log('============================gorit sraka==========================', file)
+    // console.log('============================gorit sraka==========================', file)
     cb(null, "public/images");  
     
   },
@@ -50,15 +52,16 @@ const upload = multer({ storage: storage
  });
 
 // app.post("/api/upload", upload.array(['file']), (req, res) => {
-  app.post("/api/upload", upload.single('file'), (req, res) => {
-  
+  app.post("/api/upload", upload.single('file'), async (req, res) => {
   // console.log("==============999999999999999999999999999999===============")
-  //  console.log('==================in post=============',req.file)
+   console.log('==================file=============',req.file)
    console.log('=================description==============', req.body)
-   
+   req.body.img = req.file.filename;
+   console.log('=================description==============', req.body)
   try {
-    
-    return res.status(200).json("File uploded successfully");
+    const newPost = new PostModel(req.body);
+    const savePost = await newPost.save();
+    return res.status(200).json(savePost);
   } catch (error) {
     console.error(error);
   }

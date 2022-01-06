@@ -26,7 +26,7 @@ router.put("/:id/unfollow", authMiddleware , userController.putUnfollowUser);
 
 
 router.get('/posts', authMiddleware, postController.getPosts);
-router.post("/createpost",authMiddleware, postController.createPost);
+// router.post("/createpost",authMiddleware, postController.createPost);
 router.put("/post/:id", authMiddleware , postController.updatePost);
 router.delete("/post/:id",authMiddleware, postController.deletePost);
 router.put("/:id/like", authMiddleware, postController.likedPost);
