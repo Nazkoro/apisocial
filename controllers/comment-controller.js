@@ -1,15 +1,38 @@
 const commentService = require('../service/comment-service');
+const postService = require("../service/post-service");
 // const ApiError = require('../exceptions/api-error');
 
 class CommentController {
-    async getComments(req, res, next) {
+
+    async getComments(req, res) {
+        console.log('0000000000000000000')
         try {
-            const comments = await commentService.getAllCommentS();
+            console.log(1111111111111111111111)
+         const comments = await commentService.getAllCommentS();
+            console.log(2222222222222222222,comments)
             return res.json(comments);
-        } catch (e) {
-            next(e);
+        }  catch (err) {
+            res.status(500).json(err);
+            // next(e);
         }
+        // catch (e) {
+        //     next(e);
+        // }
     };
+
+    async createComment (req, res) {
+        req.body.img = req.file.filename;
+      console.log(req.body)
+       try {
+         const savedComment = await commentService.addComment(req.body);
+          return res.status(200).json(savedComment);
+       }  catch (err) {
+           res.status(500).json(err);
+           // next(e);
+       }
+     };
+
+
 
 
 

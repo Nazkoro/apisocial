@@ -10,14 +10,13 @@ class PostService {
         return posts;
     }
 
-    
 //create a post
 
-//  async addPost (bodyOfPost)  {
-//       const newPost = new PostModel(bodyOfPost);
-//       const savePost = await newPost.save();
-//       return savePost;
-//   };
+ async addPost (bodyOfPost)  {
+      const newPost = new PostModel(bodyOfPost);
+      const savePost = await newPost.save();
+      return savePost;
+  };
   //update a post
   
   async updPost(id, bodyOfPost) {

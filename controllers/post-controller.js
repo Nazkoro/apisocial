@@ -3,6 +3,7 @@ const postService = require('../service/post-service');
 // const User = require("../models/User");
 // const {validationResult} = require('express-validator');
 const ApiError = require('../exceptions/api-error');
+const PostModel = require("../models/Post");
 
 class PostController {
    
@@ -14,18 +15,18 @@ class PostController {
             next(e);
         }
     }; 
-//create a post
 
-//  async createPost (req, res) {
-//    console.log(req.body)
-//     try {
-//       const savedPost = await postService.addPost(req.body);
-//        return res.status(200).json(savedPost);
-//     }  catch (err) {
-//         res.status(500).json(err);
-//         // next(e);
-//     }
-//   };
+     async createPost (req, res) {
+         req.body.img = req.file.filename;
+       console.log(req.body)
+        try {
+          const savedPost = await postService.addPost(req.body);
+           return res.status(200).json(savedPost);
+        }  catch (err) {
+            res.status(500).json(err);
+            // next(e);
+        }
+      };
   //update a post
   
   async updatePost (req, res) {
@@ -70,9 +71,9 @@ class PostController {
     try {
       const post = await postService.printPost(req.params.id)
       return post
-    } catch (e) {
-        next(e);
-    //   res.status(500).json(err);
+    } catch (err) {
+        // next(e);
+      res.status(500).json(err);
     }
   };
   

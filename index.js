@@ -3,82 +3,23 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose');
- const multer = require("multer");
 const router = require('./router/index')
 const errorMiddleware = require('./middlewares/error-middleware');
- const path = require("path");
- const bodyParser = require('body-parser');
-
+const path = require("path");
+const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 5000;
 const app = express()
-const PostModel = require('./models/Post');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(express.bodyParser());
 app.use(cookieParser());
-// app.use(express.static('public'));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
-//  app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use(cors({
     credentials: true,
     origin: process.env.CLIENT_URL
 }));
-
-
-
-const storage = multer.diskStorage({
-  
-  destination: (req, file, cb) => {
-    console.log('fir========================',file)
-    // file.path.replace("\\","/")
-    // console.log('============================gorit sraka==========================', file)
-    cb(null, "public/images");  
-    
-  },
-  filename: (req, file, cb) => {
-    cb(null, JSON.stringify(Date.now()) );
-  },
-});
-
-const upload = multer({ storage: storage
-//   , fileFilter: (req, file, cb) => {
-//   if (!file.mimetype) {
-//     return;
-//   }
-// }
- });
-
-// app.post("/api/upload", upload.array(['file']), (req, res) => {
-  app.post("/api/upload", upload.single('file'), async (req, res) => {
-  // console.log("==============999999999999999999999999999999===============")
-   console.log('==================file=============',req.file)
-   console.log('=================description==============', req.body)
-   req.body.img = req.file.filename;
-   console.log('=================description==============', req.body)
-  try {
-    const newPost = new PostModel(req.body);
-    const savePost = await newPost.save();
-    return res.status(200).json(savePost);
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-// app.get()
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const post = await Post.findById(req.params.id);
-//     res.status(200).json(post);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
-
-
 app.use('/api', router);
 app.use(errorMiddleware);
 
@@ -86,14 +27,14 @@ const start = async () => {
     try {
         await mongoose.connect(process.env.DB_URL, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useCreateIndex:true
         })
         app.listen(PORT, () => console.log(`Server started on PORT = ${PORT}`))
     } catch (e) {
         console.log(e);
     }
 }
-
 start()
 
 

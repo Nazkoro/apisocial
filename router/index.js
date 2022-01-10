@@ -7,6 +7,8 @@ const router = new Router();
 const {body} = require('express-validator');
 const authMiddleware = require('../middlewares/authMiddleware');
 
+const multerMiddleware = require('../middlewares/multer-middleware');
+
 router.post('/registration',
     body('email').isEmail(),
     body('password').isLength({min: 3, max: 32}),
@@ -26,6 +28,7 @@ router.put("/:id/unfollow", authMiddleware , userController.putUnfollowUser);
 
 
 router.get('/posts', authMiddleware, postController.getPosts);
+router.post("/upload",authMiddleware, multerMiddleware('file'), postController.createPost);
 // router.post("/createpost",authMiddleware, postController.createPost);
 router.put("/post/:id", authMiddleware , postController.updatePost);
 router.delete("/post/:id",authMiddleware, postController.deletePost);
@@ -36,7 +39,8 @@ router.get("/timeline/:userId", authMiddleware,  postController.getTimelinePosts
 router.get("/profile/:username", authMiddleware ,  postController.getUserAllPosts);
 
 
-router.get('/comments', authMiddleware, commentController.getComments);
+router.get('/printcomment', authMiddleware, commentController.getComments);
+router.post("/comment",authMiddleware, multerMiddleware('file'), commentController.createComment);
 
 
 module.exports = router
