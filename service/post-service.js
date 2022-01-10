@@ -45,17 +45,33 @@ class PostService {
   };
   //like / dislike a post
   
-  async likePost (id, bodyOfPost) {
-    
-      const post = await PostModel.findById(id);
-      if (!post.likes.includes(bodyOfPost.userId)) {
-        await post.updateOne({ $push: { likes: bodyOfPost.userId } });
-        return res.status(200).json("The post has been liked");
-      } else {
-        await post.updateOne({ $pull: { likes: bodyOfPost.userId } });
-        return  res.status(200).json("The post has been disliked");
-      }
-  };
+  // async likePost (id, bodyOfPost) {
+  //
+  //     const post = await PostModel.findById(id);
+  //     if (!post.likes.includes(bodyOfPost.userId)) {
+  //       await post.updateOne({ $push: { likes: bodyOfPost.userId } });
+  //       return res.status(200).json("The post has been liked");
+  //     } else {
+  //       await post.updateOne({ $pull: { likes: bodyOfPost.userId } });
+  //       return  res.status(200).json("The post has been disliked");
+  //     }
+  // };
+    async likePost (bodyOfPost) {
+        console.log('=============bodyOfPost================',bodyOfPost)
+        const post = await PostModel.findById(bodyOfPost._id);
+        // if (!post.likes.includes(bodyOfPost.userId)) {
+        if (!post.likes.includes(bodyOfPost.currentId)) {
+            console.log(1)
+             await post.updateOne({ $push: { likes: bodyOfPost.currentId } });
+            return post
+            // return res.status(200).json("The post has been liked");
+        } else {
+            console.log(2)
+            await post.updateOne({ $pull: { likes: bodyOfPost.currentId } });
+            // return  res.status(200).json("The post has been disliked");
+            return  post
+        }
+    };
   //get a post
   async printPost (id)  {
       const post = await PostModel.findById(id);

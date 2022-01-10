@@ -1,6 +1,7 @@
 const Router = require('express').Router;
 const userController = require('../controllers/user-controller');
 const postController = require('../controllers/post-controller');
+const commentController = require('../controllers/comment-controller');
 
 const router = new Router();
 const {body} = require('express-validator');
@@ -24,15 +25,18 @@ router.put("/:id/follow", authMiddleware, userController.putFollowUser);
 router.put("/:id/unfollow", authMiddleware , userController.putUnfollowUser);
 
 
-
 router.get('/posts', authMiddleware, postController.getPosts);
 // router.post("/createpost",authMiddleware, postController.createPost);
 router.put("/post/:id", authMiddleware , postController.updatePost);
 router.delete("/post/:id",authMiddleware, postController.deletePost);
-router.put("/:id/like", authMiddleware, postController.likedPost);
+// router.put("/:id/like", authMiddleware, postController.likedPost);
+router.put("/like", authMiddleware, postController.likedPost);
 router.get("/:id", authMiddleware , postController.getPost);
 router.get("/timeline/:userId", authMiddleware,  postController.getTimelinePosts); 
 router.get("/profile/:username", authMiddleware ,  postController.getUserAllPosts);
+
+
+router.get('/comments', authMiddleware, commentController.getComments);
 
 
 module.exports = router

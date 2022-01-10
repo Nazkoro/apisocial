@@ -54,12 +54,14 @@ class PostController {
   
    async likedPost (req, res)  {
     try {
-        const resultLikedPost = await postService.likePost(req.params.id, req.body)
-        return resultLikedPost
+        // const resultLikedPost = await postService.likePost(req.params.id, req.body)
+        const resultLikedPost = await postService.likePost( req.body)
+        // return  resultLikedPost
+        return  res.status(200).json(resultLikedPost);
 
-    } catch (e) {
-        next(e);
-    //   res.status(500).json(err);
+    } catch (err) {
+        // next(e);
+      res.status(500).json(err);
     }
   };
   //get a post
